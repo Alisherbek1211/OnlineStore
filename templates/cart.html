@@ -55,7 +55,7 @@
                     <td> 
                         <div class="price-wrap"> 
                             <var class="price">{{cartitem.total_price}} so'm</var> 
-                            <small class="text-muted"> {{cartitem.product.price}} so'm </small> 
+                            <small class="text-muted"> {{cartitem.get_price}} so'm </small> 
                         </div> <!-- price-wrap .// -->
                     </td>
                     <td class="text-right"> 
@@ -81,11 +81,12 @@
         <aside class="col-md-3">
             <div class="card mb-3">
                 <div class="card-body">
-                <form>
+                <form action="{% url 'cart' %}" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label>Have coupon?</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" name="code" valvue="{{code}}" placeholder="Coupon code">
+                            <input type="text" class="form-control" name="coupon-code" valvue="{{code}}" placeholder="Coupon code">
                             <span class="input-group-append"> 
                                 <button type="submit" class="btn btn-primary">Apply</button>
                             </span>

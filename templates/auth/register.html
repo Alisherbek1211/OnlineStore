@@ -1,0 +1,55 @@
+{% extends "auth/base.html" %}
+
+{% load static %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4 offset-4">
+                <div class="card">
+                    <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+                        <article class="card-body">
+                          <header class="mb-4"><h4 class="card-title">Sign up</h4></header>
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="col form-group">
+                                    <label>{{form.email.label}}</label>
+                                    {{form.email}}
+                                </div>
+                                <div class="col form-group">
+                                    <label>{{form.first_name.label}}</label>
+                                    {{form.first_name}}
+                                </div>
+                                <div class="col form-group">
+                                    <label>{{form.last_name.label}}</label>
+                                    {{form.last_name}}
+                                </div>
+                                <div class="col form-group">
+                                    <label>{{form.gender.label}}</label>
+                                    {{form.gender}}
+                                </div>
+                                <div class="col form-group">
+                                    <label>{{form.password1.label}}</label>
+                                    {{form.password1}}
+                                </div>
+                                <div class="col form-group">
+                                    <label>{{form.password2.label}}</label>
+                                    {{form.password2}}
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block"> Register  </button>
+                                </div>
+                            </form>
+                            <hr>
+                            <span style="color: red; text-align: center;">{{form.errors}}</span>
+                          </article><!-- card-body.// -->
+                    </div> <!-- card .// -->
+                    <p class="text-center mt-4">Have an account? <a href="">Log In</a></p>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main %}

@@ -1,5 +1,5 @@
+from datetime import timezone
 from .models import Cart,CartItem
-
 
 def get_cart(request):
     session_id = request.session.session_key
@@ -27,4 +27,6 @@ def get_cartitems_count(request):
     return  amount
 
 
-
+def get_current_utc():   
+    from datetime import datetime,timezone
+    return datetime.now(timezone.utc)

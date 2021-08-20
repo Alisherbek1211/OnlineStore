@@ -1,9 +1,9 @@
-from django.db.models.fields import NOT_PROVIDED
 from django.shortcuts import redirect, render
-from store.models import Product
 from django.urls import reverse
-from .models import CartItem, Cupon
-from .utils import get_cart
+
+from store.models import Product
+from .models import Cart,CartItem, Cupon
+from .utils import get_cart, get_current_utc
 
 
 
@@ -52,11 +52,36 @@ def remove_cart_item(request, cartitem_id):
 
 
 def cart(request):
+    context = {}
     cart = get_cart(request)
     cartitems = CartItem.objects.filter(cart=cart)
-    context = {
-        "cartitems":cartitems
-    }
+
+    if request.method == "POST":
+        coupon_code = request.POST.get("coupon-code", None)
+        if coupon_code:
+            coupons = Cupon.objects.filter(code=coupon_code)
+            if not coupons.exists():
+                context["coupon_not_exists"] = "The coupon code doesn't exist."
+            else:
+                coupon = coupons.first()
+                if get_current_utc() > coupon.expires_in:
+                    context["coupon_not_exists"] = "The coupon code experid."
+                else:
+                    for cartitem in cartitems:
+                        categories = []
+                        for category in coupon.category.all():
+                            categories.append(category.name)
+
+                        category = cartitem.product.sub_category.name
+                        if category in categories:
+                            if cartitem.reduced_price:
+                                cartitem.reduced_price = (cartitem.product.price * (100-coupon.stock))/100
+                            else:
+                                cartitem.reduced_price = (cartitem.product.price * (100-coupon.stock))/100
+                            cartitem.save()
+
+
+    context["cartitems"] = cartitems
     return render(request, "cart.html",context)
 
 
